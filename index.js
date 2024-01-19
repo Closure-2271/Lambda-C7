@@ -1,12 +1,16 @@
 const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const puppeteer = require('puppeteer');
 const { token, clientId } = require('./config.json');
+const { Checkpoint14 } = require('./checkpoint/checkpoint14'); // 引入 catchinfo.js 中的函数
+const { sendHelp } = require('./help');
 
 const commands = [
   new SlashCommandBuilder()
-    .setName('checkpoint11')
-    .setDescription('获取最后遗愿 遭遇战[2] 的进度信息')
+    .setName('checkpoint14')
+    .setDescription('获取最后遗愿 遭遇战[F] 的进度信息'),
+  new SlashCommandBuilder()
+    .setName('help')
+    .setDescription('显示所有命令及其描述')
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(token);
@@ -37,50 +41,17 @@ client.once('ready', () => {
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isCommand()) return;
 
-  if (interaction.commandName === 'checkpoint11') {
-    try {
-      await interaction.deferReply();
+  try {
+    await interaction.deferReply(); // 延迟回复，避免交互超时
 
-      const browser = await puppeteer.launch({ headless: "new" });
-      const page = await browser.newPage();
-      await page.goto('https://d2checkpoint.com/', { waitUntil: 'networkidle0' });
-
-      const data = await page.evaluate(() => {
-        const element = document.querySelector('[id="11"]');
-        if (!element) return null;
-
-        const imageUrl = element.querySelector('.card-img-top')?.src;
-        const raidName = element.querySelector('.card-title span')?.textContent.trim();
-        const bossName = element.querySelector('.card-subtitle span')?.textContent.trim();
-        const fireteamCount = element.querySelector('.text-warning.small')?.textContent.trim();
-        const additionalText = element.querySelector('.card-text')?.textContent.trim();
-        return { imageUrl, raidName, bossName, fireteamCount, additionalText };
-      });
-
-      await browser.close();
-
-      if (!data) {
-        await interaction.followUp('未找到相关信息。');
-        return;
-      }
-      // 创建一个普通的 embed 对象
-      const color = parseInt('0099ff', 16);
-      const embed = {
-        color: color,
-        title: data.raidName + " - " + data.bossName,
-        description: `**Fireteam Count**: ${data.fireteamCount}\n${data.additionalText}`,
-        image: { url: data.imageUrl },
-      };
-
-      await interaction.followUp({ embeds: [embed] });
-    } catch (error) {
-      console.error('Error fetching data:', error.message);
-      if (interaction.deferred || interaction.replied) {
-        await interaction.followUp('在获取数据时发生错误。').catch(console.error);
-      } else {
-        await interaction.reply('在获取数据时发生错误。').catch(console.error);
-      }
+    if (interaction.commandName === 'checkpoint14') {
+      await Checkpoint14(interaction);
+    } else if (interaction.commandName === 'help') {
+      await sendHelp(interaction);
     }
+  } catch (error) {
+    console.error('Error handling interaction:', error);
+    await interaction.followUp('处理命令时发生错误。');
   }
 });
 
