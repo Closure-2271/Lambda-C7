@@ -1,19 +1,21 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const puppeteer = require('puppeteer');
 
-async function Checkpoint99(interaction) {
+async function Checkpoint63(interaction) {
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
   await page.goto('https://d2checkpoint.com/', { waitUntil: 'networkidle0' });
 
   const data = await page.evaluate(() => {
-    const element = document.querySelector('[id="99"]');
+    const element = document.querySelector('[id="63"]');
     if (!element) return null;
 
     const imageUrl = element.querySelector('.card-img-top')?.src;
     const raidName = element.querySelector('.card-title span')?.textContent.trim();
     const bossName = element.querySelector('.card-subtitle span')?.textContent.trim();
-    const fireteamCount = element.querySelector('.text-warning.small')?.textContent.trim();
+    let fireteamCount = element.querySelector('.text-success.small')?.textContent.trim() ||
+                        element.querySelector('.text-warning.small')?.textContent.trim() ||
+                        element.querySelector('.text-danger.small')?.textContent.trim();
     const additionalText = element.querySelector('.card-text')?.textContent.trim();
     return { imageUrl, raidName, bossName, fireteamCount, additionalText };
   });
@@ -29,6 +31,7 @@ async function Checkpoint99(interaction) {
   const embed = new EmbedBuilder()
     .setColor(color)
     .setTitle(data.raidName + " - " + data.bossName)
+
     .setDescription(`**Fireteam Count**: ${data.fireteamCount}` + (data.additionalText ? `\n\n${data.additionalText}` : ''))
     .setImage(data.imageUrl);
 
@@ -47,17 +50,17 @@ async function Checkpoint99(interaction) {
     await interaction.followUp(data.additionalText);
   }
 }
-async function checkCheckpoint99() {
+async function checkCheckpoint63() {
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
   await page.goto('https://d2checkpoint.com/', { waitUntil: 'networkidle0' });
 
   const elementExists = await page.evaluate(() => {
-    const element = document.querySelector('[id="99"]');
+    const element = document.querySelector('[id="63"]');
     return element !== null;
   });
 
   await browser.close();
   return elementExists;
 }
-module.exports = { Checkpoint99, checkCheckpoint99 };
+module.exports = { Checkpoint63, checkCheckpoint63 };
