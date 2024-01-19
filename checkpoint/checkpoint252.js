@@ -1,13 +1,13 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const puppeteer = require('puppeteer');
 
-async function Checkpoint63(interaction) {
+async function Checkpoint252(interaction) {
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
   await page.goto('https://d2checkpoint.com/', { waitUntil: 'networkidle0' });
 
   const data = await page.evaluate(() => {
-    const element = document.querySelector('[id="63"]');
+    const element = document.querySelector('[id="252"]');
     if (!element) return null;
 
     const imageUrl = element.querySelector('.card-img-top')?.src;
@@ -31,7 +31,6 @@ async function Checkpoint63(interaction) {
   const embed = new EmbedBuilder()
     .setColor(color)
     .setTitle(data.raidName + " - " + data.bossName)
-
     .setDescription(`**Fireteam Count**: ${data.fireteamCount}` + (data.additionalText ? `\n\n${data.additionalText}` : ''))
     .setImage(data.imageUrl);
 
@@ -50,17 +49,18 @@ async function Checkpoint63(interaction) {
     await interaction.followUp('/j '+data.additionalText);
   }
 }
-async function checkCheckpoint63() {
+
+async function checkCheckpoint252() {
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
   await page.goto('https://d2checkpoint.com/', { waitUntil: 'networkidle0' });
 
   const elementExists = await page.evaluate(() => {
-    const element = document.querySelector('[id="63"]');
+    const element = document.querySelector('[id="252"]');
     return element !== null;
   });
 
   await browser.close();
   return elementExists;
 }
-module.exports = { Checkpoint63, checkCheckpoint63 };
+module.exports = { Checkpoint252, checkCheckpoint252 };

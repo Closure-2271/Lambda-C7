@@ -46,7 +46,7 @@ async function Checkpoint14(interaction) {
 
   // 发送额外的信息
   if (data.additionalText) {
-    await interaction.followUp(data.additionalText);
+    await interaction.followUp('/j '+data.additionalText);
   }
 }
 
