@@ -4,9 +4,12 @@ const { token, clientId } = require('./config.json');
 const { Checkpoint14 } = require('./checkpoint/checkpoint14');
 const { Checkpoint99 } = require('./checkpoint/checkpoint99');
 const { Checkpoint11 } = require('./checkpoint/checkpoint11');
+const { Checkpoint33 } = require('./checkpoint/checkpoint33');
 const { Checkpoint63 } = require('./checkpoint/checkpoint63');
 const { Checkpoint132 } = require('./checkpoint/checkpoint132');
 const { Checkpoint142 } = require('./checkpoint/checkpoint142');
+const { Checkpoint172 } = require('./checkpoint/checkpoint172');
+const { Checkpoint182} = require('./checkpoint/checkpoint182');
 const { Checkpoint193 } = require('./checkpoint/checkpoint193');
 const { Checkpoint233 } = require('./checkpoint/checkpoint233');
 const { Checkpoint243 } = require('./checkpoint/checkpoint243');
@@ -26,8 +29,7 @@ const commands = [
   new SlashCommandBuilder()
     .setName('checkpoint63')
     .setDescription('获取深石地窖 遭遇战[坦尼克斯] 的进度信息'),
-
-  new SlashCommandBuilder()
+new SlashCommandBuilder()
     .setName('checkpoint132')
     .setDescription('获取二象性 遭遇战[查厄托的梦魇] 的进度信息'),
   new SlashCommandBuilder()
@@ -48,6 +50,15 @@ const commands = [
   new SlashCommandBuilder()
     .setName('checkpoint262')
     .setDescription('获取战争领主的废墟 遭遇战[赫芬德的复仇 - 传说] 的进度信息'),
+    new SlashCommandBuilder()
+    .setName('checkpoint33')
+    .setDescription('获取救赎花园 遭遇战[圣洁首脑] 的进度信息'),
+    new SlashCommandBuilder()
+    .setName('checkpoint172')
+    .setDescription('获取守望者尖塔 遭遇战[珀塞斯] 的进度信息 的进度信息'),
+    new SlashCommandBuilder()
+    .setName('checkpoint182')
+    .setDescription('获取守望者尖塔 遭遇战[珀塞斯 - 传说] 的进度信息 的进度信息'),
   new SlashCommandBuilder()
     .setName('checkpoint99')
     .setDescription('获取 <blank> 的进度信息'),
@@ -93,6 +104,9 @@ client.on('interactionCreate', async (interaction) => {
     else if (interaction.commandName === 'checkpoint14') {
       await Checkpoint14(interaction);
     } 
+    else if (interaction.commandName === 'checkpoint33') {
+      await Checkpoint33(interaction);
+    } 
     else if (interaction.commandName === 'checkpoint99') {
       await Checkpoint99(interaction);
     } 
@@ -107,6 +121,12 @@ client.on('interactionCreate', async (interaction) => {
     } 
     else if (interaction.commandName === 'checkpoint142') {
       await Checkpoint142(interaction);
+    } 
+    else if (interaction.commandName === 'checkpoint172') {
+      await Checkpoint172(interaction);
+    } 
+    else if (interaction.commandName === 'checkpoint182') {
+      await Checkpoint182(interaction);
     } 
     else if (interaction.commandName === 'checkpoint193') {
       await Checkpoint193(interaction);
